@@ -35,8 +35,8 @@ def get_upcoming_birthdays(users, days=7):
 
     for user in users:
         birthday_this_year = user["birthday"].replace(year=today.year)
-        if birthday < today:
-            birthday = birthday.replace(year=today.year + 1)
+        if birthday_this_year < today:
+            birthday_this_year = birthday_this_year.replace(year=today.year + 1)
 
         """
         Додайте на цьому місці перевірку, чи не буде 
@@ -46,7 +46,7 @@ def get_upcoming_birthdays(users, days=7):
             
 
         if 0 <= (birthday_this_year - today).days <= days:
-            congratulation_date = adjust_for_weekend(birthday_this_year)
+            birthday_this_year = adjust_for_weekend(birthday_this_year)
             """ 
             Додайте перенесення дати привітання на наступний робочий день,
             якщо день народження припадає на вихідний. 
