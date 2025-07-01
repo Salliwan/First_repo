@@ -7,6 +7,3 @@ def get_numbers_ticket(min, max, quantity):
         return []
     else:
         print(sorted(sample(range(min, max+1), quantity)))
-
-
-get_numbers_ticket(1, 49, 6)
