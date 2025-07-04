@@ -1,9 +1,9 @@
 from pathlib import Path
 
-data = ['Alex Korp,3000', 'Nikita Borisenko,2000', 'Sitarama Raju,1000']
-with open('Work/employee_data.txt', 'w', encoding='utf-8') as file:
-    for line in data:
-        file.write(f'{line}\n')
+# data = ['Alex Korp,3000', 'Nikita Borisenko,2000', 'Sitarama Raju,1000']
+# with open('Work/employee_data.txt', 'w', encoding='utf-8') as file:
+# for line in data:
+# file.write(f'{line}\n')
 
 path = Path('Work/employee_data.txt')
 
