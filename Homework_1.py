@@ -1,11 +1,18 @@
-from datetime import datetime, timedelta
+from pathlib import Path
+
+path = Path('cats.txt')
 
 
-def get_days_from_today(date):
+def get_cats_info(path):
+    cats = []
     try:
-        date_string = datetime.strptime(date, "%Y-%m-%d").date()
-        now = datetime.today().date()
-        difference = now - date_string
-        return difference.days
-    except ValueError:
-        print(f'Please enter a valid date: ')
+        with open(path, 'r', encoding='utf-8') as file:
+            for line in file:
+                cat_id, name, age = line.strip().split(',')
+                cats.append({"id": cat_id, "name": name, "age": age})
+    except Exception as e:
+        print(f'{e} with file')
+    return cats
+
+
+print(get_cats_info(path))
