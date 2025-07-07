@@ -1,58 +1,71 @@
-from datetime import datetime, date, timedelta
+def parse_input(user_input):
+    cmd, *args = user_input.strip().split()
+    cmd = cmd.lower()
+    return cmd, args
 
 
-def string_to_date(date_string):
-    return datetime.strptime(date_string, "%Y.%m.%d").date()
+def add_contact(args, contacts):
+    if len(args) != 2:
+        return "Invalid arguments. Usage: add [name] [phone]"
+    name, phone = args
+    contacts[name] = phone
+    return "Contact added."
 
 
-def date_to_string(date):
-    return date.strftime("%Y.%m.%d")
+def change_contact(args, contacts):
+    if len(args) != 2:
+        return "Invalid arguments. Usage: change [name] [new_phone]"
+    name, phone = args
+    if name in contacts:
+        contacts[name] = phone
+        return "Contact updated."
+    else:
+        return "Contact not found."
 
 
-def prepare_user_list(user_data):
-    prepared_list = []
-    for user in user_data:
-        prepared_list.append({"name": user["name"], "birthday": string_to_date(user["birthday"])})
-    return prepared_list
+def show_phone(args, contacts):
+    if len(args) != 1:
+        return "Invalid arguments. Usage: phone [name]"
+    name = args[0]
+    if name in contacts:
+        return contacts[name]
+    else:
+        return "Contact not found."
 
 
-def find_next_weekday(start_date, weekday):
-    days_ahead = weekday - start_date.weekday()
-    if days_ahead <= 0:
-        days_ahead += 7
-    return start_date + timedelta(days=days_ahead)
+def show_all(contacts):
+    if not contacts:
+        return "No contacts found."
+    result = []
+    for name, phone in contacts.items():
+        result.append(f"{name}: {phone}")
+    return "\n".join(result)
 
 
-def adjust_for_weekend(birthday):
-    if birthday.weekday() >= 5:
-        return find_next_weekday(birthday, 0)
-    return birthday
+def main():
+    contacts = {}
+    print("Welcome to the assistant bot!")
+
+    while True:
+        user_input = input("Enter a command: ")
+        command, args = parse_input(user_input)
+
+        if command in ["exit", "close"]:
+            print("Good bye!")
+            break
+        elif command == "hello":
+            print("How can I help you?")
+        elif command == "add":
+            print(add_contact(args, contacts))
+        elif command == "change":
+            print(change_contact(args, contacts))
+        elif command == "phone":
+            print(show_phone(args, contacts))
+        elif command == "all":
+            print(show_all(contacts))
+        else:
+            print("Invalid command.")
 
 
-def get_upcoming_birthdays(users, days=7):
-    upcoming_birthdays = []
-    today = date.today()
-
-    for user in users:
-        birthday_this_year = user["birthday"].replace(year=today.year)
-        if birthday_this_year < today:
-            birthday_this_year = birthday_this_year.replace(year=today.year + 1)
-
-        """
-        Додайте на цьому місці перевірку, чи не буде 
-        припадати день народження вже наступного року.
-        """
-        
-            
-
-        if 0 <= (birthday_this_year - today).days <= days:
-            birthday_this_year = adjust_for_weekend(birthday_this_year)
-            """ 
-            Додайте перенесення дати привітання на наступний робочий день,
-            якщо день народження припадає на вихідний. 
-            """
-            
-
-            congratulation_date_str = date_to_string(birthday_this_year)
-            upcoming_birthdays.append({"name": user["name"], "congratulation_date": congratulation_date_str})
-    return upcoming_birthdays
+if __name__ == "__main__":
+    main()
